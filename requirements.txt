@@ -1,0 +1,7 @@
+opencv-python
+numpy
+requests
+ultralytics
+configparser
+logging
+pytz
