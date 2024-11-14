@@ -37,7 +37,7 @@ logger.addHandler(handler)
 
 # Load model configurations
 config_object = ConfigParser()
-config_object.read("config_puri_rhs.ini")
+config_object.read("/root/apps/config_puri_rhs.ini")
 parameters = config_object["project_parameters"]
 # Load YOLO models
 vehicle_model = YOLO(parameters['model'])
