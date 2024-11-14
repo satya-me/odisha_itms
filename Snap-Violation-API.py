@@ -13,8 +13,8 @@ from datetime import datetime
 import pytz
 
 # Camera and authentication details
-snapshot_url1 = 'http://172.11.20.212/ISAPI/Streaming/channels/1/picture' #VIDS Cam Lane 2
-snapshot_url2 = 'http://172.11.20.210/ISAPI/Streaming/channels/1/picture' #VIDS CamLane 1
+snapshot_url1 = 'http://172.11.20.207/ISAPI/Streaming/channels/1/picture' #VIDS Cam Lane 2
+snapshot_url2 = 'http://172.11.20.209/ISAPI/Streaming/channels/1/picture' #VIDS CamLane 1
 username = 'admin'
 password = 'Ador2024'
 
@@ -30,14 +30,14 @@ c_date = datetime.now(timezone)
 date1 = c_date.strftime("%Y_%m_%d")
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("my_logger1")
-handler = logging.FileHandler(f'vids_puri_rhs_{date1}.log')
+handler = logging.FileHandler(f'vids_puri_lhs_{date1}.log')
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 # Load model configurations
 config_object = ConfigParser()
-config_object.read("/root/apps/config_puri_rhs.ini")
+config_object.read("/root/apps/config_puri_lhs.ini")
 parameters = config_object["project_parameters"]
 # Load YOLO models
 vehicle_model = YOLO(parameters['model'])
@@ -66,7 +66,7 @@ def send_frame_to_api(frame, cropped_frame, cam_id, timestamp, d, bb, label):
 
         payload = json.dumps({
             "EventLog": {
-                "LPUID": "48:b0:2d:60:10:c3",
+                "LPUID": "48:b0:2d:05:bf:62",
                 "CameraID": cam_id,
                 "Timestamp": timestamp,
                 "Direction": d,
