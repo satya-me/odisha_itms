@@ -15,7 +15,7 @@ import pytz
 
 # Load model configurations
 config_object = ConfigParser()
-config_object.read("config.ini")
+config_object.read("/root/apps/config.ini")
 parameters = config_object["project_parameters"]
 print(parameters['snapshot_url1'])
 
