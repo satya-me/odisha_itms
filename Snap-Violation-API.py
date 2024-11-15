@@ -232,7 +232,7 @@ def capture_and_process():
             capture_from_camera(snapshot_url2, 'camera2')
 
             # Wait for 1 second before capturing the next snapshots
-            time.sleep(1)
+            time.sleep(15)
 
     except KeyboardInterrupt:
         logger.info("Stopping the snapshot capture and processing.")
