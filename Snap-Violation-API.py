@@ -12,9 +12,17 @@ import json
 from datetime import datetime
 import pytz
 
+
+# Load model configurations
+config_object = ConfigParser()
+config_object.read("config.ini")
+parameters = config_object["project_parameters"]
+print(parameters['snapshot_url1'])
+
 # Camera and authentication details
-snapshot_url1 = 'http://172.11.20.207/ISAPI/Streaming/channels/1/picture' #VIDS Cam Lane 2
-snapshot_url2 = 'http://172.11.20.209/ISAPI/Streaming/channels/1/picture' #VIDS CamLane 1
+snapshot_url1 = parameters['snapshot_url1'] #VIDS CamLane 1
+snapshot_url2 = parameters['snapshot_url2'] #VIDS Cam Lane 2
+
 username = 'admin'
 password = 'Ador2024'
 
@@ -30,15 +38,12 @@ c_date = datetime.now(timezone)
 date1 = c_date.strftime("%Y_%m_%d")
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("my_logger1")
-handler = logging.FileHandler(f'vids_puri_lhs_{date1}.log')
+handler = logging.FileHandler(f'vids_{date1}.log')
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-# Load model configurations
-config_object = ConfigParser()
-config_object.read("/root/apps/config_puri_lhs.ini")
-parameters = config_object["project_parameters"]
+
 # Load YOLO models
 vehicle_model = YOLO(parameters['model'])
 
@@ -66,7 +71,7 @@ def send_frame_to_api(frame, cropped_frame, cam_id, timestamp, d, bb, label):
 
         payload = json.dumps({
             "EventLog": {
-                "LPUID": "48:b0:2d:05:bf:62",
+                "LPUID": parameters['MAC_ID'],
                 "CameraID": cam_id,
                 "Timestamp": timestamp,
                 "Direction": d,
@@ -209,7 +214,7 @@ def capture_from_camera(snapshot_url, camera_id):
                         check_violations(bboxes, class_ids, bb, original_frame, timestamp, camera_id)  # Pass the original frame
             else:
                 logger.info(f"No vehicles detected in image: {filename}")
-                # os.remove(filename)  # Delete the image if no vehicles are detected
+                os.remove(filename)  # Delete the image if no vehicles are detected
                 logger.info(f"Deleted image without vehicles: {filename}")
 
         else:
@@ -227,7 +232,7 @@ def capture_and_process():
             capture_from_camera(snapshot_url2, 'camera2')
 
             # Wait for 1 second before capturing the next snapshots
-            time.sleep(15)
+            time.sleep(1)
 
     except KeyboardInterrupt:
         logger.info("Stopping the snapshot capture and processing.")
